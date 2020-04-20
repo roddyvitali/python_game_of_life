@@ -1,6 +1,7 @@
 import pygame
 import numpy as np
 import sys
+import time
 
 pygame.init()
 
@@ -11,7 +12,7 @@ bg = 25, 25, 25
 
 screen.fill(bg)
 
-nxC, nyC = 25, 25
+nxC, nyC = 50, 50
 
 dimCW = width / nxC
 dimCH = height / nyC
@@ -36,6 +37,10 @@ while True:
             sys.exit()
 
     newGameState = np.copy(gameState)
+
+    screen.fill(bg)
+    time.sleep(0.1)
+
     for y in range(0, nxC):
         for x in range(0, nyC):
 
