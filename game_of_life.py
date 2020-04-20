@@ -30,46 +30,54 @@ gameState[21, 23] = 1
 gameState[20, 23] = 1
 
 
+pauseExec = False
+
 while True:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
 
     newGameState = np.copy(gameState)
 
     screen.fill(bg)
-    time.sleep(0.1)
+    time.sleep(0.05)
+
+    ev = pygame.event.get()
+    for event in ev:
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+        elif event.type == pygame.KEYDOWN:
+            pauseExec = not pauseExec
 
     for y in range(0, nxC):
         for x in range(0, nyC):
 
-            n_neigh = gameState[(x - 1) % nxC, (y - 1) % nyC] + \
-                gameState[(x) % nxC, (y - 1) % nyC] + \
-                gameState[(x + 1) % nxC, (y - 1) % nyC] + \
-                gameState[(x - 1) % nxC, (y) % nyC] + \
-                gameState[(x + 1) % nxC, (y) % nyC] + \
-                gameState[(x - 1) % nxC, (y + 1) % nyC] + \
-                gameState[(x) % nxC, (y + 1) % nyC] + \
-                gameState[(x + 1) % nxC, (y + 1) % nyC]
+            if not pauseExec:
 
-            if gameState[x, y] == 0 and n_neigh == 3:
-                newGameState[x, y] = 1
+                n_neigh = gameState[(x - 1) % nxC, (y - 1) % nyC] + \
+                    gameState[(x) % nxC, (y - 1) % nyC] + \
+                    gameState[(x + 1) % nxC, (y - 1) % nyC] + \
+                    gameState[(x - 1) % nxC, (y) % nyC] + \
+                    gameState[(x + 1) % nxC, (y) % nyC] + \
+                    gameState[(x - 1) % nxC, (y + 1) % nyC] + \
+                    gameState[(x) % nxC, (y + 1) % nyC] + \
+                    gameState[(x + 1) % nxC, (y + 1) % nyC]
 
-            elif gameState[x, y] == 1 and (n_neigh < 2 or n_neigh > 3):
-                newGameState[x, y] = 0
+                if gameState[x, y] == 0 and n_neigh == 3:
+                    newGameState[x, y] = 1
 
-            poly = [
-                ((x) * dimCW, y * dimCH),
-                ((x + 1) * dimCW, y * dimCH),
-                ((x + 1) * dimCW, (y + 1) * dimCH),
-                ((x) * dimCW, (y + 1) * dimCH),
-            ]
+                elif gameState[x, y] == 1 and (n_neigh < 2 or n_neigh > 3):
+                    newGameState[x, y] = 0
 
-            if newGameState[x, y] == 0:
-                pygame.draw.polygon(screen, (128, 128, 128), poly, 1)
-            else:
-                pygame.draw.polygon(screen, (255, 255, 255), poly, 0)
+                poly = [
+                    ((x) * dimCW, y * dimCH),
+                    ((x + 1) * dimCW, y * dimCH),
+                    ((x + 1) * dimCW, (y + 1) * dimCH),
+                    ((x) * dimCW, (y + 1) * dimCH),
+                ]
+
+                if newGameState[x, y] == 0:
+                    pygame.draw.polygon(screen, (128, 128, 128), poly, 1)
+                else:
+                    pygame.draw.polygon(screen, (255, 255, 255), poly, 0)
     gameState = np.copy(newGameState)
 
     pygame.display.flip()
