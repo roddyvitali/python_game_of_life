@@ -37,7 +37,7 @@ while True:
     newGameState = np.copy(gameState)
 
     screen.fill(bg)
-    time.sleep(0.05)
+    time.sleep(0.01)
 
     ev = pygame.event.get()
     for event in ev:
@@ -54,7 +54,7 @@ while True:
             celX, celY = int(np.floor(posX / dimCW)
                              ), int(np.floor(posY / dimCH))
 
-            newGameState[celX, celY] = 1
+            newGameState[celX, celY] = not mouseClick[2]
 
     for y in range(0, nxC):
         for x in range(0, nyC):
@@ -76,17 +76,17 @@ while True:
                 elif gameState[x, y] == 1 and (n_neigh < 2 or n_neigh > 3):
                     newGameState[x, y] = 0
 
-                poly = [
-                    ((x) * dimCW, y * dimCH),
-                    ((x + 1) * dimCW, y * dimCH),
-                    ((x + 1) * dimCW, (y + 1) * dimCH),
-                    ((x) * dimCW, (y + 1) * dimCH),
-                ]
+            poly = [
+                ((x) * dimCW, y * dimCH),
+                ((x + 1) * dimCW, y * dimCH),
+                ((x + 1) * dimCW, (y + 1) * dimCH),
+                ((x) * dimCW, (y + 1) * dimCH),
+            ]
 
-                if newGameState[x, y] == 0:
-                    pygame.draw.polygon(screen, (128, 128, 128), poly, 1)
-                else:
-                    pygame.draw.polygon(screen, (255, 255, 255), poly, 0)
+            if newGameState[x, y] == 0:
+                pygame.draw.polygon(screen, (128, 128, 128), poly, 1)
+            else:
+                pygame.draw.polygon(screen, (255, 255, 255), poly, 0)
     gameState = np.copy(newGameState)
 
     pygame.display.flip()
